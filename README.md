@@ -1,6 +1,6 @@
-# Guia Interativo de Estudos
+# Guias de Estudo
 
-Plataforma educacional com guias interativos (estilo Claude Artifact), menu lateral para trocar de assunto, e painel admin com persistência em JSON.
+Plataforma de guias interativos para desenvolvimento — BDD, Clean Code, SOLID e mais. Menu lateral, exercícios com validação em tempo real e painel admin.
 
 ## Assuntos incluídos
 
@@ -12,7 +12,7 @@ Plataforma educacional com guias interativos (estilo Claude Artifact), menu late
 ## Como rodar
 
 ```powershell
-cd clean-code-solid-guide
+cd guias-de-estudo
 npm install
 cd server; npm install; cd ..
 cd client; npm install; cd ..

@@ -6,7 +6,7 @@ export const adminDocs = {
   subject: {
     title: 'Assunto',
     fields: [
-      { name: 'slug', desc: 'Identificador na URL. Só letras minúsculas, números e hífen. Ex: bdd, clean-code-solid' },
+      { name: 'slug', desc: 'Identificador na URL. Só letras minúsculas, números e hífen. Ex: bdd, clean-code, solid' },
       { name: 'title', desc: 'Título grande no topo da página do assunto' },
       { name: 'subtitle', desc: 'Texto descritivo abaixo do título' },
       { name: 'badge', desc: 'Etiqueta pequena acima do título. Ex: BDD, Clean Code' },
