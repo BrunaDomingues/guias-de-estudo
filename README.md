@@ -4,8 +4,10 @@ Plataforma educacional com guias interativos (estilo Claude Artifact), menu late
 
 ## Assuntos incluídos
 
-- **BDD** — conceito, Gherkin, ciclo Red/Green/Refactor, comparativo e quiz
-- **Clean Code & SOLID** — conceito, princípios, comparativo e quiz
+- **BDD** — conceito, Gherkin, exercício, ciclo, comparativo e quiz
+- **Clean Code** — conceito, princípios, comparativo e quiz
+- **SOLID** — conceito, princípios S/O/L/I/D, comparativo e quiz
+- **Clean Code + SOLID na Prática** — como os dois se complementam
 
 ## Como rodar
 

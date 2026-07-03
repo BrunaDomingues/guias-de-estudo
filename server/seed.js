@@ -1,5 +1,307 @@
 import { bddExerciseContent } from './exerciseTemplate.js'
 
+export function seedCleanCodeSubjects(store, startOrder = 2) {
+  const cleanCode = store.createSubject({
+    slug: 'clean-code',
+    title: 'Clean Code',
+    subtitle: 'Código legível, funções claras e intenção explícita — o que Uncle Bob defende.',
+    badge: 'Clean Code',
+    icon: '✨',
+    sort_order: startOrder
+  })
+
+  const solid = store.createSubject({
+    slug: 'solid',
+    title: 'SOLID',
+    subtitle: 'Cinco princípios para classes e módulos flexíveis, testáveis e fáceis de evoluir.',
+    badge: 'SOLID',
+    icon: '🏛️',
+    sort_order: startOrder + 1
+  })
+
+  const pratica = store.createSubject({
+    slug: 'na-pratica',
+    title: 'Clean Code + SOLID na Prática',
+    subtitle: 'Como os dois se complementam no dia a dia — refatoração com propósito.',
+    badge: 'Na prática',
+    icon: '🔗',
+    sort_order: startOrder + 2
+  })
+
+  const sections = [
+    // ── Clean Code ──
+    {
+      subject_id: cleanCode.id,
+      slug: 'conceito',
+      label: 'Conceito',
+      icon: '💡',
+      type: 'concept',
+      sort_order: 1,
+      content: {
+        title: 'Código como comunicação',
+        description: 'Clean Code trata código como texto que humanos leem todo dia. Legibilidade não é luxo — é requisito. Você escreve para o próximo dev (que pode ser você daqui a 6 meses).',
+        heroCodeLabel: 'O que o código deve comunicar',
+        heroCode: `// ❌ O que isso faz?\nfunction p(o) { return o.q * o.p - o.d }\n\n// ✅ Intenção clara\nfunction calculateOrderTotal(order) {\n  return order.quantity * order.price - order.discount\n}`,
+        cards: [
+          { tag: 'Legibilidade', title: 'Nomes que revelam intenção', description: 'Variáveis, funções e classes devem dizer o que fazem sem comentário.' },
+          { tag: 'Simplicidade', title: 'Funções pequenas', description: 'Uma função, uma responsabilidade. Se precisa de comentário para explicar, provavelmente faz demais.' },
+          { tag: 'DRY', title: 'Don\'t Repeat Yourself', description: 'Duplicação é a raiz de muitos bugs. Extraia lógica repetida.' }
+        ],
+        pillars: [
+          { icon: '📖', title: 'Legível', description: 'Qualquer dev entende em minutos.' },
+          { icon: '🔧', title: 'Manutenível', description: 'Mudanças localizadas, sem medo.' },
+          { icon: '🧪', title: 'Testável', description: 'Funções pequenas são fáceis de testar.' }
+        ]
+      }
+    },
+    {
+      subject_id: cleanCode.id,
+      slug: 'principios',
+      label: 'Princípios',
+      icon: '✨',
+      type: 'principles',
+      sort_order: 2,
+      content: {
+        intro: 'Baseado em Robert C. Martin (Uncle Bob). Clique em cada princípio para ver o exemplo.',
+        items: [
+          { title: 'Nomes que revelam intenção', description: 'Evite abreviações obscuras e nomes genéricos como data, info, temp.', example: `// ❌ Ruim\nlet d = new Date()\nlet u = getU()\n\n// ✅ Bom\nlet createdAt = new Date()\nlet activeUser = getActiveUser()` },
+          { title: 'Funções pequenas e focadas', description: 'Uma função, uma responsabilidade.', example: `// ❌ Ruim\nfunction processOrder(order) {\n  validate(order)\n  calculateTotal(order)\n  saveToDb(order)\n  sendEmail(order)\n}\n\n// ✅ Bom\nfunction processOrder(order) {\n  const valid = validateOrder(order)\n  return finalizeOrder(valid, calculateTotal(valid))\n}` },
+          { title: 'Comentários só quando necessário', description: 'Código limpo se explica sozinho.', example: `// ❌ Ruim\n// incrementa i\ni++\n\n// ✅ Bom\nremainingAttempts--` },
+          { title: 'Tratamento de erros explícito', description: 'Use exceções em vez de códigos de retorno mágicos.', example: `// ❌ Ruim\nif (result === -1) return null\n\n// ✅ Bom\ntry {\n  return repository.findById(id)\n} catch {\n  throw new UserNotFoundError(id)\n}` },
+          { title: 'DRY', description: 'Extraia lógica repetida.', example: `function isValidEmail(email) {\n  return email.includes('@') && email.includes('.')\n}` }
+        ]
+      }
+    },
+    {
+      subject_id: cleanCode.id,
+      slug: 'comparativo',
+      label: 'Comparativo',
+      icon: '⚖️',
+      type: 'compare',
+      sort_order: 3,
+      content: {
+        modes: [
+          {
+            key: 'funcoes',
+            label: 'Funções',
+            bad: `function calc(a, b, t) {\n  if (t == 1) return a + b\n  if (t == 2) return a - b\n  if (t == 3) return a * b\n  return a / b\n}`,
+            good: `function add(a, b) { return a + b }\nfunction subtract(a, b) { return a - b }\nfunction multiply(a, b) { return a * b }\nfunction divide(a, b) { return a / b }`,
+            issuesBad: ['Parâmetro mágico (t)', 'Função faz 4 coisas', 'Impossível testar isoladamente'],
+            issuesGood: ['Nome e propósito claros', 'Uma responsabilidade', 'Fácil de testar']
+          },
+          {
+            key: 'nomes',
+            label: 'Nomenclatura',
+            bad: `const d = users.filter(u => u.a)\nconst t = d.reduce((s, x) => s + x.p, 0)`,
+            good: `const activeUsers = users.filter(user => user.isActive)\nconst totalPrice = activeUsers.reduce((sum, user) => sum + user.price, 0)`,
+            issuesBad: ['Variáveis de uma letra', 'Abreviações obscuras'],
+            issuesGood: ['Nomes revelam intenção', 'Código autoexplicativo']
+          }
+        ]
+      }
+    },
+    {
+      subject_id: cleanCode.id,
+      slug: 'quiz',
+      label: 'Quiz',
+      icon: '🎯',
+      type: 'quiz',
+      sort_order: 4,
+      content: {
+        questions: [
+          { question: 'Qual é um bom nome de função segundo Clean Code?', options: ['process()', 'doStuff()', 'calculateOrderTotal()', 'handle()'], correct: 2, explanation: 'Nomes devem revelar intenção.' },
+          { question: 'Segundo Clean Code, funções devem ser:', options: ['Longas e completas', 'Pequenas e fazer uma coisa', 'Sempre genéricas', 'Evitar parâmetros'], correct: 1, explanation: 'Funções pequenas e focadas.' },
+          { question: 'DRY significa:', options: ['Delete Repeated YAML', 'Don\'t Repeat Yourself', 'Do Run Yearly', 'Design Ready Yesterday'], correct: 1, explanation: 'Evite duplicação de lógica.' },
+          { question: 'Comentários em código limpo devem:', options: ['Explicar tudo', 'Substituir bons nomes', 'Compensar código confuso', 'Ser raros — o código se explica'], correct: 3, explanation: 'Comentários não substituem nomenclatura clara.' }
+        ]
+      }
+    },
+
+    // ── SOLID ──
+    {
+      subject_id: solid.id,
+      slug: 'conceito',
+      label: 'Conceito',
+      icon: '💡',
+      type: 'concept',
+      sort_order: 1,
+      content: {
+        title: 'Arquitetura que escala com mudanças',
+        description: 'SOLID são cinco princípios de design orientado a objetos para estruturar classes e módulos de forma flexível. Cada letra resolve um problema comum de acoplamento e rigidez.',
+        heroCodeLabel: 'As cinco letras',
+        heroCode: `S — Single Responsibility\nO — Open/Closed\nL — Liskov Substitution\nI — Interface Segregation\nD — Dependency Inversion`,
+        cards: [
+          { tag: 'S', title: 'Responsabilidade Única', description: 'Uma classe, um motivo para mudar.' },
+          { tag: 'O', title: 'Aberto/Fechado', description: 'Estenda sem modificar código existente.' },
+          { tag: 'D', title: 'Inversão de Dependência', description: 'Dependa de abstrações, não de implementações.' }
+        ],
+        pillars: [
+          { icon: '🧩', title: 'Baixo acoplamento', description: 'Módulos independentes.' },
+          { icon: '🎯', title: 'Alta coesão', description: 'Cada parte faz uma coisa bem.' },
+          { icon: '🧪', title: 'Testável', description: 'Injeção de dependência facilita mocks.' }
+        ]
+      }
+    },
+    {
+      subject_id: solid.id,
+      slug: 'principios',
+      label: 'Princípios',
+      icon: '🏛️',
+      type: 'solid',
+      sort_order: 2,
+      content: {
+        intro: 'Selecione um princípio para explorar a definição e comparar código ruim vs bom.',
+        items: [
+          { letter: 'S', name: 'Single Responsibility', subtitle: 'Responsabilidade Única', description: 'Uma classe deve ter apenas um motivo para mudar.', bad: `class Invoice {\n  calculateTotal() {}\n  saveToDatabase() {}\n  generatePDF() {}\n  sendByEmail() {}\n}`, good: `class Invoice { calculateTotal() {} }\nclass InvoiceRepository { save() {} }\nclass InvoicePDFGenerator { generate() {} }\nclass EmailService { send() {} }` },
+          { letter: 'O', name: 'Open/Closed', subtitle: 'Aberto/Fechado', description: 'Aberto para extensão, fechado para modificação.', bad: `function getDiscount(type) {\n  if (type === 'student') return 0.5\n  if (type === 'senior') return 0.3\n}`, good: `interface DiscountStrategy {\n  getRate(): number\n}\nclass StudentDiscount implements DiscountStrategy {\n  getRate() { return 0.5 }\n}` },
+          { letter: 'L', name: 'Liskov Substitution', subtitle: 'Substituição de Liskov', description: 'Subtipos substituíveis sem quebrar o programa.', bad: `class Bird { fly() {} }\nclass Penguin extends Bird {\n  fly() { throw Error('Cannot fly!') }\n}`, good: `interface Flyable { fly() }\nclass Sparrow implements Flyable { fly() {} }\nclass Penguin { swim() {} }` },
+          { letter: 'I', name: 'Interface Segregation', subtitle: 'Segregação de Interface', description: 'Interfaces pequenas e específicas.', bad: `interface Worker {\n  work()\n  eat()\n  sleep()\n}\nclass Robot implements Worker {\n  eat() { /* ??? */ }\n}`, good: `interface Workable { work() }\nclass Robot implements Workable {\n  work() {}\n}` },
+          { letter: 'D', name: 'Dependency Inversion', subtitle: 'Inversão de Dependência', description: 'Dependa de abstrações, não de implementações.', bad: `class OrderService {\n  constructor() {\n    this.db = new MySQLDatabase()\n  }\n}`, good: `class OrderService {\n  constructor(database) {\n    this.db = database\n  }\n}` }
+        ]
+      }
+    },
+    {
+      subject_id: solid.id,
+      slug: 'comparativo',
+      label: 'Comparativo',
+      icon: '⚖️',
+      type: 'compare',
+      sort_order: 3,
+      content: {
+        modes: [
+          {
+            key: 'srp',
+            label: 'SRP violado',
+            bad: `class UserService {\n  saveToDatabase(user) { /* SQL */ }\n  sendWelcomeEmail(user) { /* SMTP */ }\n  generatePDFReport(user) { /* PDF */ }\n  validateCPF(cpf) { /* regex */ }\n}`,
+            good: `class UserRepository { save(user) { /* SQL */ } }\nclass EmailService { sendWelcome(user) { /* SMTP */ } }\nclass UserValidator { validateCPF(cpf) { /* regex */ } }`,
+            issuesBad: ['4 responsabilidades', 'Mudança no email quebra tudo', 'Difícil mockar'],
+            issuesGood: ['Uma responsabilidade por classe', 'Mudanças isoladas', 'Fácil testar']
+          },
+          {
+            key: 'dip',
+            label: 'DIP violado',
+            bad: `class ReportService {\n  constructor() {\n    this.exporter = new PdfExporter()\n  }\n}`,
+            good: `class ReportService {\n  constructor(exporter) {\n    this.exporter = exporter\n  }\n}\n// PdfExporter, CsvExporter, MockExporter...`,
+            issuesBad: ['Acoplado a PDF', 'Impossível trocar formato'],
+            issuesGood: ['Depende de abstração', 'Extensível sem modificar']
+          }
+        ]
+      }
+    },
+    {
+      subject_id: solid.id,
+      slug: 'quiz',
+      label: 'Quiz',
+      icon: '🎯',
+      type: 'quiz',
+      sort_order: 4,
+      content: {
+        questions: [
+          { question: 'Qual princípio diz que uma classe deve ter apenas um motivo para mudar?', options: ['Open/Closed', 'Single Responsibility', 'Liskov Substitution', 'Dependency Inversion'], correct: 1, explanation: 'SRP: responsabilidade única.' },
+          { question: 'Open/Closed significa:', options: ['Aberto para modificação', 'Fechado para modificação, aberto para extensão', 'Sempre aberto', 'Fechado'], correct: 1, explanation: 'OCP: estenda sem modificar.' },
+          { question: 'Liskov Substitution diz que subtipos devem:', options: ['Ser maiores que a base', 'Ser substituíveis sem quebrar', 'Nunca herdar', 'Sempre sobrescrever'], correct: 1, explanation: 'Subtipos substituíveis pela base.' },
+          { question: 'Dependency Inversion: alto nível não deve depender de:', options: ['Interfaces', 'Baixo nível diretamente', 'Injeção', 'Abstrações'], correct: 1, explanation: 'DIP: dependa de abstrações.' },
+          { question: 'Interface Segregation evita:', options: ['Herança', 'Interfaces que o cliente não usa', 'Composição', 'Polimorfismo'], correct: 1, explanation: 'ISP: interfaces pequenas e específicas.' }
+        ]
+      }
+    },
+
+    // ── Na prática (junção) ──
+    {
+      subject_id: pratica.id,
+      slug: 'conceito',
+      label: 'Conceito',
+      icon: '💡',
+      type: 'concept',
+      sort_order: 1,
+      content: {
+        title: 'Quando Clean Code encontra SOLID',
+        description: 'Clean Code cuida da legibilidade linha a linha. SOLID cuida da estrutura de classes e módulos. Juntos, você refatora com propósito: nomes claros dentro de responsabilidades bem separadas.',
+        heroCodeLabel: 'Refatoração em duas camadas',
+        heroCode: `// 1. Clean Code — nomes e funções pequenas\nfunction calculateDiscountedTotal(items, rate) {\n  return items.reduce((sum, item) => sum + item.price, 0) * (1 - rate)\n}\n\n// 2. SOLID — SRP + DIP\nclass OrderCalculator {\n  constructor(discountPolicy) {\n    this.discountPolicy = discountPolicy\n  }\n  calculateTotal(items) { /* ... */ }\n}`,
+        cards: [
+          { tag: 'Clean Code', title: 'Micro — legibilidade', description: 'Nomes, funções pequenas, sem duplicação.' },
+          { tag: 'SOLID', title: 'Macro — arquitetura', description: 'Responsabilidades, extensão, dependências.' },
+          { tag: 'Refatorar', title: 'Ciclo contínuo', description: 'Primeiro faz funcionar, depois limpa, depois estrutura.' }
+        ],
+        pillars: [
+          { icon: '🔄', title: 'Red → Green → Refactor', description: 'Testes verdes, depois melhore estrutura.' },
+          { icon: '📐', title: 'SRP + funções pequenas', description: 'Mesma ideia em escala diferente.' },
+          { icon: '🧪', title: 'DIP + testabilidade', description: 'Abstrações permitem mocks limpos.' }
+        ]
+      }
+    },
+    {
+      subject_id: pratica.id,
+      slug: 'complementam',
+      label: 'Como se complementam',
+      icon: '🤝',
+      type: 'principles',
+      sort_order: 2,
+      content: {
+        intro: 'Cada princípio SOLID ganha força quando o código ao redor é limpo.',
+        items: [
+          { title: 'SRP + funções pequenas', description: 'SRP separa classes; Clean Code separa funções. Mesma filosofia, escalas diferentes.', example: `// Classe com SRP\nclass PaymentProcessor { process() {} }\nclass ReceiptSender { send() {} }\n\n// Funções pequenas dentro delas\nfunction validatePayment(payment) { /* uma coisa */ }\nfunction chargeCard(payment) { /* uma coisa */ }` },
+          { title: 'OCP + código legível', description: 'Extensão via novas classes só funciona se os nomes e interfaces forem claros.', example: `// Nova estratégia sem modificar existente\nclass BlackFridayDiscount implements DiscountStrategy {\n  getRate() { return 0.3 }\n}` },
+          { title: 'DIP + testes limpos', description: 'Injetar dependências permite mocks. Funções pequenas tornam os testes legíveis.', example: `const service = new OrderService(mockDatabase)\n// teste focado, sem infra real` },
+          { title: 'Refatoração segura', description: 'Clean Code primeiro (renomear, extrair). Depois SOLID (separar classes, injetar).', example: `// Passo 1: extrair função com nome claro\n// Passo 2: mover para classe com responsabilidade única\n// Passo 3: injetar dependência` }
+        ]
+      }
+    },
+    {
+      subject_id: pratica.id,
+      slug: 'comparativo',
+      label: 'Comparativo',
+      icon: '⚖️',
+      type: 'compare',
+      sort_order: 3,
+      content: {
+        modes: [
+          {
+            key: 'antes',
+            label: 'Antes (sem nenhum)',
+            bad: `class App {\n  run(d, u, t) {\n    if (t == 1) { /* SQL */ }\n    if (t == 2) { /* email */ }\n    if (t == 3) { /* pdf */ }\n  }\n}`,
+            good: `class CreateOrderUseCase {\n  constructor(repo, notifier) {\n    this.repo = repo\n    this.notifier = notifier\n  }\n  execute(order) {\n    const valid = validateOrder(order)\n    this.repo.save(valid)\n    this.notifier.sendConfirmation(valid)\n  }\n}`,
+            issuesBad: ['Parâmetros mágicos', 'Tudo numa classe', 'Impossível testar'],
+            issuesGood: ['Nomes claros', 'SRP + DIP', 'Testável e extensível']
+          },
+          {
+            key: 'clean-code',
+            label: 'Só Clean Code',
+            bad: `function handle(data) {\n  // 200 linhas...\n}`,
+            good: `function validateUser(user) { /* ... */ }\nfunction saveUser(user) { /* ... */ }\nfunction notifyUser(user) { /* ... */ }`,
+            issuesBad: ['Ainda tudo acoplado num módulo', 'Sem separação de camadas'],
+            issuesGood: ['Legível', 'Mas falta estrutura de classes/módulos']
+          }
+        ]
+      }
+    },
+    {
+      subject_id: pratica.id,
+      slug: 'quiz',
+      label: 'Quiz',
+      icon: '🎯',
+      type: 'quiz',
+      sort_order: 4,
+      content: {
+        questions: [
+          { question: 'Clean Code foca principalmente em:', options: ['Herança', 'Legibilidade e clareza', 'Banco de dados', 'Deploy'], correct: 1, explanation: 'Clean Code = código legível.' },
+          { question: 'SOLID foca principalmente em:', options: ['Design de classes e módulos', 'Sintaxe da linguagem', 'CSS', 'Git'], correct: 0, explanation: 'SOLID = princípios de design OOP.' },
+          { question: 'Qual combinação faz mais sentido?', options: ['SRP + funções gigantes', 'SRP + funções pequenas', 'DIP + acoplamento forte', 'OCP + modificar tudo'], correct: 1, explanation: 'SRP e funções pequenas são a mesma ideia em escalas diferentes.' },
+          { question: 'Ordem ideal de refatoração:', options: ['SOLID antes de funcionar', 'Faz funcionar → Clean Code → SOLID', 'Nunca refatorar', 'Só comentários'], correct: 1, explanation: 'Primeiro verde, depois limpa, depois estrutura.' },
+          { question: 'DIP ajuda testes porque:', options: ['Elimina testes', 'Permite injetar mocks', 'Usa mais SQL', 'Remove interfaces'], correct: 1, explanation: 'Abstrações permitem substituir implementações.' }
+        ]
+      }
+    }
+  ]
+
+  for (const section of sections) {
+    store.createSection(section)
+  }
+
+  return { cleanCode, solid, pratica }
+}
+
 export function seedData(store) {
   const bdd = store.createSubject({
     slug: 'bdd',
@@ -8,15 +310,6 @@ export function seedData(store) {
     badge: 'BDD',
     icon: '🥒',
     sort_order: 1
-  })
-
-  const cleanCode = store.createSubject({
-    slug: 'clean-code-solid',
-    title: 'Clean Code & SOLID',
-    subtitle: 'Aprenda a escrever código legível, manutenível e bem estruturado.',
-    badge: 'Clean Code',
-    icon: '✨',
-    sort_order: 2
   })
 
   const sections = [
@@ -126,106 +419,22 @@ export function seedData(store) {
           { question: 'Qual a principal vantagem do BDD sobre specs em documento?', options: ['Mais rápido', 'Spec viva que roda no CI', 'Não precisa de testes', 'Substitui o código'], correct: 1, explanation: 'A spec vira teste executável.' }
         ]
       }
-    },
-    // Clean Code sections
-    {
-      subject_id: cleanCode.id,
-      slug: 'conceito',
-      label: 'Conceito',
-      icon: '💡',
-      type: 'concept',
-      sort_order: 1,
-      content: {
-        title: 'Descrever a intenção antes de escrever o código',
-        description: 'Clean Code e SOLID são formas de escrever software que outras pessoas conseguem ler, entender e mudar sem medo.',
-        heroCodeLabel: 'Clean Code — foco na legibilidade',
-        heroCode: `Dado um pedido com 3 itens\nQuando calculo o total com desconto de 10%\nEntão o valor final deve ser R$ 270,00`,
-        cards: [
-          { tag: 'Clean Code', title: 'Código como comunicação', description: 'Legibilidade não é luxo — é requisito.' },
-          { tag: 'SOLID', title: 'Arquitetura que escala', description: 'Cinco princípios para código flexível e testável.' },
-          { tag: 'Prática', title: 'Refatoração contínua', description: 'Escreve, testa, refatora.' }
-        ],
-        pillars: [
-          { icon: '📖', title: 'Legível', description: 'Nomes claros, funções pequenas.' },
-          { icon: '🧪', title: 'Testável', description: 'Responsabilidades separadas.' },
-          { icon: '🔧', title: 'Manutenível', description: 'Mudanças localizadas.' }
-        ]
-      }
-    },
-    {
-      subject_id: cleanCode.id,
-      slug: 'clean-code',
-      label: 'Clean Code',
-      icon: '✨',
-      type: 'principles',
-      sort_order: 2,
-      content: {
-        intro: 'Baseado em Robert C. Martin (Uncle Bob).',
-        items: [
-          { title: 'Nomes que revelam intenção', description: 'Variáveis e funções devem dizer o que fazem.', example: `// ❌ Ruim\nlet d = new Date()\n\n// ✅ Bom\nlet createdAt = new Date()` },
-          { title: 'Funções pequenas e focadas', description: 'Uma função, uma responsabilidade.', example: `function processOrder(order) {\n  const valid = validateOrder(order)\n  return finalizeOrder(valid, calculateTotal(valid))\n}` },
-          { title: 'DRY', description: 'Extraia lógica repetida.', example: `function isValidEmail(email) {\n  return email.includes('@') && email.includes('.')\n}` }
-        ]
-      }
-    },
-    {
-      subject_id: cleanCode.id,
-      slug: 'solid',
-      label: 'SOLID',
-      icon: '🏛️',
-      type: 'solid',
-      sort_order: 3,
-      content: {
-        intro: 'Selecione um princípio para explorar.',
-        items: [
-          { letter: 'S', name: 'Single Responsibility', subtitle: 'Responsabilidade Única', description: 'Uma classe, um motivo para mudar.', bad: `class Invoice {\n  calculateTotal() {}\n  saveToDatabase() {}\n}`, good: `class Invoice { calculateTotal() {} }\nclass InvoiceRepository { save() {} }` },
-          { letter: 'O', name: 'Open/Closed', subtitle: 'Aberto/Fechado', description: 'Aberto para extensão, fechado para modificação.', bad: `if (type === 'student') return 0.5`, good: `class StudentDiscount { getRate() { return 0.5 } }` },
-          { letter: 'L', name: 'Liskov Substitution', subtitle: 'Substituição de Liskov', description: 'Subtipos substituíveis sem quebrar.', bad: `class Penguin extends Bird { fly() { throw Error() } }`, good: `class Penguin { swim() {} }` },
-          { letter: 'I', name: 'Interface Segregation', subtitle: 'Segregação de Interface', description: 'Interfaces pequenas e específicas.', bad: `interface Worker { work(); eat(); }`, good: `interface Workable { work() }` },
-          { letter: 'D', name: 'Dependency Inversion', subtitle: 'Inversão de Dependência', description: 'Dependa de abstrações.', bad: `this.db = new MySQLDatabase()`, good: `constructor(database) { this.db = database }` }
-        ]
-      }
-    },
-    {
-      subject_id: cleanCode.id,
-      slug: 'comparativo',
-      label: 'Comparativo',
-      icon: '⚖️',
-      type: 'compare',
-      sort_order: 4,
-      content: {
-        modes: [
-          {
-            key: 'cleanCode',
-            label: 'Clean Code',
-            bad: `function calc(a, b, t) {\n  if (t == 1) return a + b\n  if (t == 2) return a - b\n}`,
-            good: `function add(a, b) { return a + b }\nfunction subtract(a, b) { return a - b }`,
-            issuesBad: ['Parâmetro mágico', 'Função faz várias coisas'],
-            issuesGood: ['Nomes claros', 'Uma responsabilidade por função']
-          }
-        ]
-      }
-    },
-    {
-      subject_id: cleanCode.id,
-      slug: 'quiz',
-      label: 'Quiz',
-      icon: '🎯',
-      type: 'quiz',
-      sort_order: 5,
-      content: {
-        questions: [
-          { question: 'Qual princípio SOLID diz que uma classe deve ter apenas um motivo para mudar?', options: ['Open/Closed', 'Single Responsibility', 'Liskov Substitution', 'Dependency Inversion'], correct: 1, explanation: 'SRP: responsabilidade única.' },
-          { question: 'Qual é um bom nome de função segundo Clean Code?', options: ['process()', 'doStuff()', 'calculateOrderTotal()', 'handle()'], correct: 2, explanation: 'Nomes revelam intenção.' },
-          { question: 'O princípio Open/Closed significa:', options: ['Aberto para modificação', 'Fechado para modificação, aberto para extensão', 'Sempre aberto', 'Fechado'], correct: 1, explanation: 'OCP: estenda sem modificar.' },
-          { question: 'Funções devem ser:', options: ['Longas', 'Pequenas e fazer uma coisa', 'Genéricas', 'Sem parâmetros'], correct: 1, explanation: 'Funções pequenas e focadas.' },
-          { question: 'Dependency Inversion: alto nível não deve depender de:', options: ['Interfaces', 'Baixo nível diretamente', 'Injeção', 'Abstrações'], correct: 1, explanation: 'DIP: dependa de abstrações.' }
-        ]
-      }
     }
   ]
 
   for (const section of sections) {
     store.createSection(section)
   }
+
+  seedCleanCodeSubjects(store, 2)
+}
+
+export function migrateSplitCleanCodeSubjects(store) {
+  const legacy = store.getSubjectBySlug('clean-code-solid')
+  const hasCleanCode = store.getSubjectBySlug('clean-code')
+  if (!legacy || hasCleanCode) return false
+
+  store.deleteSubject(legacy.id)
+  seedCleanCodeSubjects(store, 2)
+  return true
 }

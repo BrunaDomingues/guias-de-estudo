@@ -1,7 +1,7 @@
 import { readFileSync, writeFileSync, existsSync, mkdirSync } from 'fs'
 import { dirname, join } from 'path'
 import { fileURLToPath } from 'url'
-import { seedData } from './seed.js'
+import { seedData, migrateSplitCleanCodeSubjects } from './seed.js'
 import { bddExerciseContent } from './exerciseTemplate.js'
 
 const __dirname = dirname(fileURLToPath(import.meta.url))
@@ -131,6 +131,8 @@ const store = {
 if (data.subjects.length === 0) {
   seedData(store)
 } else {
+  migrateSplitCleanCodeSubjects(store)
+
   const bdd = data.subjects.find(s => s.slug === 'bdd')
   if (bdd && !data.sections.some(s => s.subject_id === bdd.id && s.slug === 'exercicio')) {
     store.createSection({
