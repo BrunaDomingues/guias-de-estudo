@@ -12,7 +12,6 @@ Plataforma de guias interativos para desenvolvimento — BDD, Clean Code, SOLID 
 ## Como rodar
 
 ```powershell
-cd guias-de-estudo
 npm install
 cd server; npm install; cd ..
 cd client; npm install; cd ..
